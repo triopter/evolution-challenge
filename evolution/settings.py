@@ -113,3 +113,11 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
 STATIC_URL = "/static/"
+
+
+# Custom
+CORS_HEADERS = {
+    "Access-Control-Allow-Origin": "http://127.0.0.1:3000",
+    "Access-Control-Allow-Methods": "GET",
+    "Access-Control-Allow-Headers": "X-Requested-With",
+}

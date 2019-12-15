@@ -10,6 +10,7 @@ black = "*"
 django = "*"
 psycopg2 = "*"
 evolution-challenge = {editable = true,path = "."}
+pyhumps = "*"
 
 [requires]
 python_version = "3.7"

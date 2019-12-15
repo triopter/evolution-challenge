@@ -12,18 +12,18 @@ class Command(BaseCommand):
     )
 
     def add_arguments(self, parser):
-        parser.add_argument("file_path", type=str, action="store")
+        parser.add_argument("file_path", nargs="+", type=str, action="store")
 
     def handle(self, *args, **options):
-        path = options["file_path"]
-        print(f"Importing from {path}")
-        try:
-            with open(path, "r") as fp:
-                raw_data = json.load(fp)
-        except FileNotFoundError:
-            raise CommandError(f"Invalid file path {path}")
+        for path in options["file_path"]:
+            print(f"Importing from {path}")
+            try:
+                with open(path, "r") as fp:
+                    raw_data = json.load(fp)
+            except FileNotFoundError:
+                raise CommandError(f"Invalid file path {path}")
 
-        self.import_data(raw_data)
+            self.import_data(raw_data)
 
     def import_data(self, raw_data):
         ScoreImporter().import_data(raw_data)
