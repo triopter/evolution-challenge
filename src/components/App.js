@@ -4,8 +4,13 @@ import { connect } from 'react-redux'
 import {
   loadTeamsFromFile,
   setTeamSort,
+  loadTeamsFromServer,
+  toggleDataMode,
 } from 'store/actions'
-import { sortedTeams } from 'store/selectors'
+import {
+  sortedTeams,
+  getNextRemoteDataState,
+} from 'store/selectors'
 
 import Table from 'components/Table'
 
@@ -14,16 +19,36 @@ const mapStateToProps = (state) => ({
   teams: sortedTeams(state.teams,
                       state.sortColumn,
                       state.sortDirection),
+  useRemoteData: state.useRemoteData,
 })
 
 const mapDispatchToProps = dispatch => ({
   loadTeamsFromFile: (...args) => dispatch(loadTeamsFromFile(...args)),
   setTeamSort: (...args) => dispatch(setTeamSort(...args)),
+  loadTeamsFromServer: (...args) => dispatch(loadTeamsFromServer(...args)),
+  toggleDataMode: (...args) => dispatch(toggleDataMode(...args)),
 })
 
 class App extends Component {
   componentDidMount () {
-    this.props.loadTeamsFromFile(this.props.dataFileName)
+    this.refreshData(this.props.useRemoteData)
+  }
+
+  refreshData = (useRemoteData) => {
+    if (useRemoteData) {
+      this.props.loadTeamsFromServer(this.props.serverUrl)
+    }
+    else {
+      this.props.loadTeamsFromFile(this.props.dataFileName)
+    }
+  }
+
+  changeDataMode = () => {
+    // need to detect and send this here because the prop won't change until the next tick
+    // A more elegant solution might be to subscribe to the data directly in the store
+    let nowUseRemote = getNextRemoteDataState(this.props.useRemoteData)
+    this.refreshData(nowUseRemote)
+    this.props.toggleDataMode()
   }
 
   columns = [
@@ -41,6 +66,11 @@ class App extends Component {
   render () {
     return (
       <div>
+        <p>Loading data {this.props.useRemoteData ? 'from server' : 'in client' }.
+          <button onClick={this.changeDataMode}>
+            Reload {this.props.useRemoteData ? 'in client' : 'from server'}
+          </button>
+        </p>
         <Table
           data={ this.props.teams }
           columns={ this.columns }

@@ -12,3 +12,5 @@ export const sortedTeams = (teams, sortColumn, sortDirection) => {
                             (sortDirection === 'DESC' ? -1 : 1))
   })
 }
+
+export const getNextRemoteDataState = (currentSetting) => !currentSetting

@@ -1,15 +1,21 @@
 import {
   LOAD_TEAMS,
   SORT_TEAMS,
+  TOGGLE_MODE,
 } from './types'
+
+import {
+  getNextRemoteDataState,
+} from './selectors'
 
 const initialState = {
   teams: [],
   sortColumn: 'rank',
   sortDirection: 'ASC',
+  useRemoteData: false,
 }
 
-const reducers = (state = initialState, action) => {
+const teams = (state = initialState, action) => {
   switch (action.type) {
     case LOAD_TEAMS: {
       return { ...state, teams: [ ...action.payload ] }
@@ -21,11 +27,18 @@ const reducers = (state = initialState, action) => {
         sortDirection: action.sortDirection
       }
     }
+    case TOGGLE_MODE: {
+      return {
+        ...state,
+        useRemoteData: getNextRemoteDataState(state.useRemoteData),
+      }
+    }
     default: {
       return state
     }
   }
+
 }
 
-export default reducers;
+export default teams;
 
