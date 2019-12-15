@@ -54,3 +54,54 @@ class Score(models.Model):
 
     def __str__(self):
         return f"{self.team}: {self.score} ({self.match.match_date})"
+
+
+class Summary(models.Model):
+    """
+    Using a non-managed model to read-only data from a view.
+    """
+
+    season = models.ForeignKey(
+        Season,
+        related_name="team_summaries",
+        on_delete=models.DO_NOTHING,
+        db_column="season_id",
+    )
+    league = models.CharField(max_length=191)
+    team = models.ForeignKey(
+        Team, related_name="summary", on_delete=models.DO_NOTHING, db_column="team_id"
+    )
+    name = models.CharField(max_length=191)
+    league = models.CharField(max_length=191)
+    code = models.CharField(max_length=6)
+    wins = models.PositiveIntegerField()
+    losses = models.PositiveIntegerField()
+    draws = models.PositiveIntegerField()
+    goals_for = models.PositiveIntegerField()
+    goals_against = models.PositiveIntegerField()
+    goal_difference = models.IntegerField()
+    points = models.PositiveIntegerField()
+    rank = models.PositiveIntegerField()
+    eligibility = models.CharField(max_length=191)
+
+    class Meta:
+        managed = False  # because this is a view -- we won't create the tables
+        db_table = "stats_summary"
+        ordering = [
+            "rank",
+        ]
+        unique_together = ["league", "season", "code"]
+
+    def __str__(self):
+        return f"{self.rank}: {self.team.name}"
+
+    # prevent editing data
+    # Note: to further enforce this in an app with multiple developers,
+    # we might also use a custom queryset class and model manager
+    # with the create(), update(), and delete() methods disabled.
+    def save(self, *args, **kwargs):
+        pass
+
+    def delete(self, *args, **kwargs):
+        pass
+
