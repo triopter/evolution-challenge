@@ -8,7 +8,7 @@ import * as serviceWorker from './serviceWorker'
 
 ReactDOM.render(
   <Provider store={store}>
-    <App />
+    <App dataFileName='/2016-2017.json' />
   </Provider>,
   document.getElementById('root'))
 
