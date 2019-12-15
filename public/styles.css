@@ -20,3 +20,14 @@ th {
   background: #f3f3f3;
   text-shadow: 1px 1px #FFF;
 }
+.uefa td {
+  background: #E3FFC0;
+}
+
+.europa td {
+  background: #FFFFCC;
+}
+
+.relegated td {
+  background: #FFDDDD;
+}

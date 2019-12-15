@@ -34,6 +34,7 @@ class App extends Component {
   ]
 
   render () {
+    console.log(this.props.teams)
     return (
       <div>
         <Table
