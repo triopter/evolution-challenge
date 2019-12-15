@@ -6,7 +6,7 @@ const Table = (props) => {
   return (
     <table>
       <thead>
-        <TableHeader columns={ props.columns } />
+      <TableHeader columns={ props.columns } sortCallback={ props.sortCallback } />
       </thead>
       <tbody>
         { props.data.map((team) => {

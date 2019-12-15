@@ -3,17 +3,22 @@ import { connect } from 'react-redux'
 
 import {
   loadTeamsFromFile,
+  setTeamSort,
 } from 'store/actions'
+import { sortedTeams } from 'store/selectors'
 
 import Table from 'components/Table'
 
 // Note that in a more complex app we might want to memo-ize this
 const mapStateToProps = (state) => ({
-  teams: state.teams
+  teams: sortedTeams(state.teams,
+                      state.sortColumn,
+                      state.sortDirection),
 })
 
 const mapDispatchToProps = dispatch => ({
   loadTeamsFromFile: (...args) => dispatch(loadTeamsFromFile(...args)),
+  setTeamSort: (...args) => dispatch(setTeamSort(...args)),
 })
 
 class App extends Component {
@@ -34,12 +39,12 @@ class App extends Component {
   ]
 
   render () {
-    console.log(this.props.teams)
     return (
       <div>
         <Table
           data={ this.props.teams }
-          columns={ this.columns } />
+          columns={ this.columns }
+          sortCallback={ this.props.setTeamSort } />
       </div>
     )
   }

@@ -1,5 +1,6 @@
 import {
   LOAD_TEAMS,
+  SORT_TEAMS,
 } from './types'
 
 import DataLoader, {
@@ -19,3 +20,11 @@ export const loadTeams = (data) => ({
   type: LOAD_TEAMS,
   payload: data,
 })
+
+export const setTeamSort = (sortColumn, sortDirection) => (dispatch) => {
+  dispatch({
+    type: SORT_TEAMS,
+    sortColumn: sortColumn,
+    sortDirection: sortDirection,
+  })
+}
